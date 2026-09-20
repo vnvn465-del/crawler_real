@@ -9,7 +9,6 @@ from app.core.config import TARGET_URL, FETCH_MODE, SNAPSHOT_DATE
 from app.db.database import get_connection
 from app.repositories.snapshot_repository import create_tables, save_items, get_snapshot_rows
 from app.crawler.fetcher import fetch_html
-from app.crawler.playwright_fetch import fetch_html_with_playwright
 from app.crawler.parser import parse_products
 
 
@@ -18,6 +17,8 @@ def get_html_by_mode(url: str) -> str:
         return fetch_html(url)
 
     if FETCH_MODE == "playwright":
+        # 필요할 때만 import — 미설치 환경에서도 httpx 모드는 살아 있게
+        from app.crawler.playwright_fetch import fetch_html_with_playwright
         return fetch_html_with_playwright(url)
 
     raise ValueError(f"지원하지 않는 FETCH_MODE입니다: {FETCH_MODE}")

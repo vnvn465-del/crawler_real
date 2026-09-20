@@ -14,12 +14,13 @@ from app.core.config import PARSER_ENGINE
 
 
 # 문자열에서 숫자만 추출해 int로 변환하는 함수
-def to_int(text: str) -> int:
-    # 숫자가 아닌 문자 제거
-    numbers = re.sub(r"[^0-9]", "", text)
+# 숫자가 없으면 None(파싱 실패)을 반환한다. 0으로 둔갑시키지 않는다.
+def to_int(text: str | None) -> int | None:
+    # None이 들어와도 안전하게 빈 문자열로 처리
+    numbers = re.sub(r"[^0-9]", "", text or "")
 
-    # 숫자가 있으면 int 변환, 없으면 0 반환
-    return int(numbers) if numbers else 0
+    # 숫자가 있으면 int, 없으면 None
+    return int(numbers) if numbers else None
 
 
 # HTML 문자열에서 상품 목록을 파싱하는 함수
