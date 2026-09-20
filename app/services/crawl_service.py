@@ -32,6 +32,9 @@ def collect_items(url: str = TARGET_URL) -> list[dict]:
 
 def collect_and_save_snapshot(snapshot_date: str | None = None) -> dict:
     target_date = snapshot_date or SNAPSHOT_DATE or date.today().isoformat()
+
+    # 1) 수집 + 파싱을 먼저 끝낸다.
+    #    여기서 실패하면(ParseError) DB를 아예 건드리지 않는다.
     items = collect_items(TARGET_URL)
 
     conn = get_connection()
@@ -40,6 +43,12 @@ def collect_and_save_snapshot(snapshot_date: str | None = None) -> dict:
         create_tables(conn)
         save_items(conn, items, target_date)
         saved_items = get_snapshot_rows(conn, target_date)
+
+    except Exception:
+        # 2) 저장 도중 문제가 생기면 부분 저장을 남기지 않는다
+        conn.rollback()
+        raise          # 3) 예외를 위로 올려보낸다 (삼키면 실패가 성공으로 둔갑)
+
     finally:
         conn.close()
 

@@ -23,7 +23,7 @@ def create_tables(conn):
             snapshot_date TEXT NOT NULL,
             rank INTEGER NOT NULL,
             price INTEGER NOT NULL,
-            review_count INTEGER NOT NULL,
+            review_count INTEGER,
             PRIMARY KEY (product_id, snapshot_date),
             FOREIGN KEY (product_id) REFERENCES products(product_id)
         )
