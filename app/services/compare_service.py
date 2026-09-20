@@ -79,13 +79,21 @@ def compare_two_snapshots(old_date: str, new_date: str) -> dict | None:
             })
 
         # 리뷰 수 비교
-        if old_item["review_count"] != new_item["review_count"]:
+        old_review = old_item["review_count"]
+        new_review = new_item["review_count"]
+
+        if old_review != new_review:
+            if old_review is None or new_review is None:
+                diff = None                      #  못 읽은 값 -> 계산 불가
+            else:
+                diff = new_review - old_review   # 둘 다 진짜 숫자 -> 안전
+
             review_changes.append({
                 "product_id": product_id,
                 "name": new_item["name"],
-                "old_review_count": old_item["review_count"],
-                "new_review_count": new_item["review_count"],
-                "diff": new_item["review_count"] - old_item["review_count"],
+                "old_review_count": old_review,
+                "new_review_count": new_review,
+                "diff": diff,
             })
 
     # 최종 비교 결과 반환
