@@ -1,17 +1,17 @@
 # =========================
-# fetcher.py
-# HTML을 가져오는 역할
+# app/crawler/fetcher.py
+# 일반 HTTP 요청 기반 HTML 수집
 # =========================
 
-# HTTP 요청용 라이브러리
+# HTTP 요청 라이브러리 import
 import httpx
 
 # 설정값 import
-from config import REQUEST_TIMEOUT
+from app.core.config import REQUEST_TIMEOUT
 
 
 # URL에서 HTML을 가져오는 함수
-def fetch_html(url):
+def fetch_html(url: str) -> str:
     # GET 요청 전송
     response = httpx.get(url, timeout=REQUEST_TIMEOUT)
 
