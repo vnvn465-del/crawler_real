@@ -1,0 +1,63 @@
+<!-- =========================
+     ranking_js.html
+     "자바스크립트로 그려지는 페이지" 재현용 테스트 페이지
+
+     httpx      -> <ul id="ranking"></ul> 만 받는다 (li.product 0개)
+                   -> parser.py 가 ParseError 로 차단
+     playwright -> 브라우저가 JS 를 실행한 뒤의 HTML 을 받는다
+                   -> li.product 3개 정상 파싱
+     ========================= -->
+<html>
+  <head>
+    <!-- 이 한 줄이 없으면 브라우저는 windows-1252 로 해석해 한글이 깨진다. -->
+    <!-- (httpx 는 UTF-8 로 가정하기 때문에 여기서 차이가 벌어진다) -->
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <ul id="ranking"></ul>
+
+    <script>
+      // 서버 응답 시점에는 이 <ul> 이 "비어 있다".
+      // 0.5초 뒤에 자바스크립트가 li 를 만들어 넣는다.
+      const products = [
+        {
+          id: "A100",
+          rank: "2",
+          name: "립밤",
+          price: "6,200원",
+          reviews: "리뷰 12",
+        },
+        {
+          id: "A200",
+          rank: "1",
+          name: "토너",
+          price: "12,000원",
+          reviews: "리뷰 103",
+        },
+        {
+          id: "A400",
+          rank: "3",
+          name: "세럼",
+          price: "21,500원",
+          reviews: "리뷰 8",
+        },
+      ];
+
+      setTimeout(() => {
+        const ul = document.getElementById("ranking");
+
+        for (const p of products) {
+          const li = document.createElement("li");
+          li.className = "product";
+          li.setAttribute("data-id", p.id);
+          li.innerHTML =
+            `<span class="rank">${p.rank}</span>` +
+            `<span class="name">${p.name}</span>` +
+            `<span class="price">${p.price}</span>` +
+            `<span class="reviews">${p.reviews}</span>`;
+          ul.appendChild(li);
+        }
+      }, 500);
+    </script>
+  </body>
+</html>

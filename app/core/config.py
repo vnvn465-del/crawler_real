@@ -5,7 +5,7 @@
 
 # 수집 대상 URL
 # 지금은 로컬 html 서버를 사용
-TARGET_URL = "http://127.0.0.1:8000/ranking.html"
+TARGET_URL = "http://127.0.0.1:8000/ranking_js.html"
 
 # SQLite DB 파일 경로
 DB_PATH = "crawler.db"
@@ -18,7 +18,7 @@ PARSER_ENGINE = "lxml"
 
 # fetch 방식
 # "httpx" 또는 "playwright"
-FETCH_MODE = "httpx"
+FETCH_MODE = "playwright"
 
 # Playwright 설정
 HEADLESS = True
